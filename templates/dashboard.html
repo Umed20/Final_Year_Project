@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Security Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="active">Dashboard</a>
+            <a href="#">Analytics</a>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="card security-status">
+            <h2>Security Status</h2>
+            <div class="status-item">
+                <span class="status-dot" id="fingerprint-dot"></span>
+                <span class="status-label">Fingerprint:</span>
+                <span class="status-value" id="fingerprint-status">Loading...</span>
+            </div>
+            <div class="status-item">
+                <span class="status-dot" id="intruder-dot"></span>
+                <span class="status-label">Intruder Detection:</span>
+                <span class="status-value" id="intruder-status">Loading...</span>
+            </div>
+            <div class="status-item">
+                <span class="status-dot" id="theft-dot"></span>
+                <span class="status-label">Theft Detection:</span>
+                <span class="status-value" id="theft-status">Loading...</span>
+            </div>
+        </div>
+
+        <div class="card vehicle-status">
+            <h2>Vehicle Status</h2>
+            <div class="status-item">
+                <span class="status-dot" id="ignition-dot"></span>
+                <span class="status-label">Ignition:</span>
+                <span class="status-value" id="ignition-status">Loading...</span>
+            </div>
+            <div class="status-item">
+                <span class="status-dot" id="brake-dot"></span>
+                <span class="status-label">Brake:</span>
+                <span class="status-value" id="brake-status">Loading...</span>
+            </div>
+            <div class="status-item">
+                <span class="status-dot" id="towed-dot"></span>
+                <span class="status-label">Towed Status:</span>
+                <span class="status-value" id="towed-status">Loading...</span>
+            </div>
+            <div class="status-item">
+                <span class="status-dot" id="accident-dot"></span>
+                <span class="status-label">Accident Detection:</span>
+                <span class="status-value" id="accident-status">Loading...</span>
+            </div>
+        </div>
+
+        <div class="card safety-metrics">
+            <h2>Safety Metrics</h2>
+            <div class="status-item">
+                <span class="status-dot" id="alcohol-dot"></span>
+                <span class="status-label">Alcohol Detection:</span>
+                <span class="status-value" id="alcohol-status">Loading...</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Temperature:</span>
+                <span class="status-value" id="temperature">Loading...</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Speed Level:</span>
+                <span class="status-value" id="speed-level">Loading...</span>
+            </div>
+            <div class="status-item">
+                <span class="status-dot" id="gas-dot"></span>
+                <span class="status-label">Gas Detection:</span>
+                <span class="status-value" id="gas-status">Loading...</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Light Level (LDR):</span>
+                <span class="status-value" id="light-level">Loading...</span>
+            </div>
+        </div>
+
+        <div class="card location">
+            <h2>Location</h2>
+            <div id="map"></div>
+            <div class="location-text" id="location-text">Loading...</div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

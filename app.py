@@ -12,25 +12,25 @@ def dashboard():
 
 @app.route('/api/sensor-data', methods=['POST'])
 def receive_sensor_data():
-    """Receive sensor data from Raspberry Pi."""
     data = request.json
 
     if not data:
         return jsonify({"error": "Invalid data"}), 400
 
     new_entry = SensorData(
-        temperature=data.get("temperature"),
-        alcohol_detection=data.get("alcohol_detection"),
-        gas_detection=data.get("gas_detection"),
-        light_level=data.get("light_level"),
-        speed_level=data.get("speed_level"),
+        temperature=data["safety_metrics"].get("temperature"),
+        alcohol_detection=data["safety_metrics"].get("alcohol_detection"),
+        gas_detection=data["safety_metrics"].get("gas_detection"),
+        light_level=data["safety_metrics"].get("light_level"),
+        speed_level=data["safety_metrics"].get("speed_level"),
         fingerprint_status=data.get("fingerprint_status"),
-        accident_detection=data.get("accident_detection"),
-        towed_status=data.get("towed_status"),
-        ignition_status=data.get("ignition_status"),
-        latitude=data.get("latitude"),
-        longitude=data.get("longitude")
+        accident_detection=data["vehicle_status"].get("accident_detection"),
+        towed_status=data["vehicle_status"].get("towed_status"),
+        ignition_status=data["vehicle_status"].get("ignition"),
+        latitude=data["location_data"].get("latitude"),
+        longitude=data["location_data"].get("longitude"),
     )
+
     db.session.add(new_entry)
     db.session.commit()
 
@@ -38,7 +38,6 @@ def receive_sensor_data():
 
 @app.route('/api/sensor-data', methods=['GET'])
 def get_sensor_data():
-    """Fetch the latest sensor data and format it for the frontend."""
     latest_data = SensorData.query.order_by(SensorData.timestamp.desc()).first()
 
     if not latest_data:
@@ -46,30 +45,31 @@ def get_sensor_data():
 
     response = {
         "security_status": {
-            "fingerprint": latest_data.fingerprint_status,
-            "intruder_detection": "Unknown",  # You can modify this based on actual data
-            "theft_detection": "Unknown"
+            "fingerprint": latest_data.fingerprint_status or "No Data",
+            "intruder_detection": "N/A",
+            "theft_detection": "N/A"
         },
         "vehicle_status": {
-            "ignition": latest_data.ignition_status,
-            "brake": "Unknown",  # Modify this if you have brake status data
-            "towed_status": latest_data.towed_status,
-            "accident_detection": latest_data.accident_detection
+            "ignition": latest_data.ignition_status or "No Data",
+            "brake": "N/A",
+            "towed_status": latest_data.towed_status or "No Data",
+            "accident_detection": latest_data.accident_detection or "No Data"
         },
         "safety_metrics": {
-            "alcohol_detection": latest_data.alcohol_detection,
-            "temperature": latest_data.temperature,
-            "speed_level": latest_data.speed_level,
-            "gas_detection": latest_data.gas_detection,
-            "light_level": latest_data.light_level
+            "alcohol_detection": latest_data.alcohol_detection or "No Data",
+            "temperature": latest_data.temperature or "No Data",
+            "speed_level": latest_data.speed_level or "No Data",
+            "gas_detection": latest_data.gas_detection or "No Data",
+            "light_level": latest_data.light_level or "No Data"
         },
         "location_data": {
-            "latitude": latest_data.latitude,
-            "longitude": latest_data.longitude,
+            "latitude": latest_data.latitude or 0,
+            "longitude": latest_data.longitude or 0,
             "location_name": "Current Location"
         }
     }
     return jsonify(response)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
